@@ -1,0 +1,2 @@
+# SnakeHunger
+you just die
