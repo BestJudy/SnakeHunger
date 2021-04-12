@@ -22,6 +22,7 @@ class snake_class(object):
         self.positions = [((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))]
         self.direction = random.choice([UP, DOWN, LEFT, RIGHT])
         self.color = (17, 34, 47)
+        self.score = 0
 
     def get_head_position(self):
         return self.positions[0]
@@ -46,7 +47,8 @@ class snake_class(object):
     def reset(self):
         self.length = 1
         self.positions = [((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))]
-        self.direction = random.choice(UP, DOWN, LEFT, RIGHT)
+        self.direction = random.choice([UP, DOWN, LEFT, RIGHT])
+        self.score = 0
 
     def draw(self, surface):
         for p in self.positions:
@@ -63,11 +65,11 @@ class snake_class(object):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     self.turn(UP)
-                elif event.type == pygame.K_DOWN:
+                elif event.key == pygame.K_DOWN:
                     self.turn(DOWN)
-                elif event.type == pygame.K_LEFT:
+                elif event.key == pygame.K_LEFT:
                     self.turn(LEFT)
-                elif event.type == pygame.K_RIGHT:
+                elif event.key == pygame.K_RIGHT:
                     self.turn(RIGHT)
 
 class food_class(object):
@@ -90,7 +92,9 @@ def drawGrid(surface):
             if (x + y) % 2 == 0:
                 r = pygame.Rect((x*GRIDZISE, y*GRIDZISE), (GRIDZISE, GRIDZISE))
                 pygame.draw.rect(surface, (93, 216, 228), r)
-
+            else:
+                rr = pygame.Rect((x*GRIDZISE, y*GRIDZISE), (GRIDZISE, GRIDZISE))
+                pygame.draw.rect(surface, (84, 194, 205), rr)
 
 
 def main():
@@ -108,7 +112,6 @@ def main():
 
     myfont = pygame.font.SysFont("monospace", 16)
 
-    score = 0
     while (True):
         clock.tick(10)
         snake.handle_keys()
@@ -116,14 +119,14 @@ def main():
         snake.move()
         if snake.get_head_position() == food.position:
             snake.length += 1
-            score += 1
+            snake.score += 1
             food.randomize_position()
         snake.draw(surface)
         food.draw(surface)
-        screen.blit(surface, (0, 00))
-        text = myfont.render("Score {0}".format(score), 1, (0, 0, 0))
-        screen.blit(text, (5, 10))
         screen.blit(surface, (0, 0))
+        text = myfont.render("Score {0}".format(snake.score), 1, (0,0,0))
+        screen.blit(text, (5, 10))
+        #screen.blit(surface, (0, 0))
         pygame.display.update()
 
 main()
